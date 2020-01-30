@@ -1,19 +1,22 @@
-import firebase from 'firebase/app';
+import * as firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
+import 'firebase/storage';
 
-// Replace this with your own config details
 var config = {
-  apiKey: "AIzaSyBd1bWWCmixk0C5298XrPArAHD9ASkbkdU",
-  authDomain: "taskweb-a2205.firebaseapp.com",
-  databaseURL: "https://taskweb-a2205.firebaseio.com",
-  projectId: "taskweb-a2205",
-  storageBucket: "taskweb-a2205.appspot.com",
-  messagingSenderId: "522091145487",
-  appId: "1:522091145487:web:c67833c9a0cdd6bcdbf67a",
-  measurementId: "G-1KP5WSBZZM"
+  apiKey: "AIzaSyCdioJ9iQ7DoDWc5sZJo54_FIHDKH4Z6F4",
+    authDomain: "hfinal-ddd44.firebaseapp.com",
+    databaseURL: "https://hfinal-ddd44.firebaseio.com",
+    projectId: "hfinal-ddd44",
+    storageBucket: "hfinal-ddd44.appspot.com",
+    messagingSenderId: "507251778120",
+    appId: "1:507251778120:web:bb24728f05022812cd2e7d",
+    measurementId: "G-KHBJT1C322"
 };
 firebase.initializeApp(config);
 firebase.firestore().settings({ timestampsInSnapshots: true });
+const storage = firebase.storage();
 
-export default firebase 
+export {
+  storage, firebase as default
+}

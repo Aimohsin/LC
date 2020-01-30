@@ -1,3 +1,4 @@
+
 export const signIn = (credentials) => {
   return (dispatch, getState, {getFirebase}) => {
     const firebase = getFirebase();
@@ -31,7 +32,7 @@ export const signUp = (newUser) => {
 
     firebase.auth().createUserWithEmailAndPassword(
       newUser.email, 
-      newUser.password
+      newUser.password,
     ).then(resp => {
       return firestore.collection('users').doc(resp.user.uid).set({
         firstName: newUser.firstName,

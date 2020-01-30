@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { signUp } from '../../store/actions/authActions'
+import './style.css'
 
 class SignUp extends Component {
   state = {
@@ -9,7 +10,21 @@ class SignUp extends Component {
     password: '', 
     firstName: '',
     lastName: '',
+    isPasswordShown: false
   }
+  togglePasswordVisiblity = () => {
+    const { isPasswordShown } = this.state;
+    this.setState({ isPasswordShown: !isPasswordShown });
+  };
+  GenPass(){
+    var generator = require('generate-password');
+    var password = generator.generate({
+        length:6,
+        numbers: true
+    });
+    document.getElementById("password").value = password;
+    console.log(password);
+}
   handleChange = (e) => {
     this.setState({
       [e.target.id]: e.target.value
@@ -20,6 +35,7 @@ class SignUp extends Component {
     this.props.signUp(this.state);
   }
   render() {
+    const { isPasswordShown } = this.state;
     const { auth, authError } = this.props;
     if (auth.uid) return <Redirect to='/' /> 
     return (
@@ -32,7 +48,9 @@ class SignUp extends Component {
           </div>
           <div className="input-field">
             <label htmlFor="password">Password</label>
-            <input type="password" id='password' onChange={this.handleChange} />
+            <input type={isPasswordShown ? "text" : "password"} id='password' onChange={this.handleChange} />
+            <input type="button" class="button" className="btn pink lighten-1 z-depth-0"  value="Generate" onClick={this.GenPass}/>
+            <i className="fa fa-eye password-icon" onClick={this.togglePasswordVisiblity}></i>
           </div>
           <div className="input-field">
             <label htmlFor="firstName">First Name</label>

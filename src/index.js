@@ -24,3 +24,6 @@ store.firebaseAuthIsReady.then(() => {
   registerServiceWorker();
 });
 
+// ReactDOM.render(<App />, document.getElementById('root'));
+// registerServiceWorker();
+
