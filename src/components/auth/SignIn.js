@@ -37,7 +37,7 @@ class SignIn extends Component {
           <div className="input-field">
             <label htmlFor="password">Password</label>
             <input type={isPasswordShown ? "text" : "password"} id='password' onChange={this.handleChange} />
-            <i className="fa fa-eye password-icon" onClick={this.togglePasswordVisiblity}></i>
+            <i onClick={this.togglePasswordVisiblity}></i>
           </div>
           <div className="input-field">
             <button className="btn pink lighten-1 z-depth-0">Login</button>
@@ -45,11 +45,27 @@ class SignIn extends Component {
               { authError ? <p>{authError}</p> : null }
             </div>
           </div>
+          <div>
+            <a href="http://192.168.18.5:3001/trainerNew">Signup</a>
+            <div className="center red-text">
+            </div>
+          </div><br />
+          <div>
+            <a href="http://192.168.18.5:3001/participantSignIN">If you are a Participant, Click Here</a>
+            <div className="center red-text">
+            </div>
+          </div>
+          <div>
+            <a href="http://192.168.18.5:3001/">If you are an Admin, Click Here</a>
+            <div className="center red-text">
+            </div>
+          </div>
         </form>
       </div>
     )
   }
 }
+// className="fa fa-eye password-icon" 
 
 const mapStateToProps = (state) => {
   return{

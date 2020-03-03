@@ -1,17 +1,17 @@
-import * as firebase from 'firebase';
+import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
 
 var config = {
-  apiKey: "AIzaSyCdioJ9iQ7DoDWc5sZJo54_FIHDKH4Z6F4",
-    authDomain: "hfinal-ddd44.firebaseapp.com",
-    databaseURL: "https://hfinal-ddd44.firebaseio.com",
-    projectId: "hfinal-ddd44",
-    storageBucket: "hfinal-ddd44.appspot.com",
-    messagingSenderId: "507251778120",
-    appId: "1:507251778120:web:bb24728f05022812cd2e7d",
-    measurementId: "G-KHBJT1C322"
+  apiKey: "AIzaSyCgyGlYThXDGKYzbWPQ_ksqNBRLwaXk6ek",
+    authDomain: "newest-ff351.firebaseapp.com",
+    databaseURL: "https://newest-ff351.firebaseio.com",
+    projectId: "newest-ff351",
+    storageBucket: "newest-ff351.appspot.com",
+    messagingSenderId: "29791183459",
+    appId: "1:29791183459:web:9e7732a5417721509b4e56",
+    measurementId: "G-SEC20WYRRS"
 };
 firebase.initializeApp(config);
 firebase.firestore().settings({ timestampsInSnapshots: true });

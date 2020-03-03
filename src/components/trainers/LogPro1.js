@@ -8,14 +8,13 @@ class LogPro1 extends Component{
         super(props);
             this.state = { email:'', firstName:'', lastName:'', datecreated:'', role:'', gender:'', address:'', city:'', country:'',
             zipcode:'', cell1:'', cell2:'', email1:'', email2:'', linkedInProfile:'', website:'', currentEmployer:'', 
-            degreeTitle:'', degreeUni:'', yearAwarded:'', dcountry:'', 
             avatar: "", isUploading: false, progress: 0, avatarURL: "", 
-            designation:'', employer:'', jfrom:'', jto:'', jcountry:'' , 
             briefSummary:'', totalExperience:'', teachingExperience:'', countriesServed:'', languages:''  
             , accountTitle:'', accountID:'', bankName:'', branchName:'', IBAN:'', SWIFT:'', VAT_ID:'' , appliedFor:'',approvedCourses:'', 
             OtherCourses:'', HistNoCourses:'', HistNoParticipants:'', rating:'', feedback:'', courseTitle:'',
             startDate:'', endDate:'', location:'', timings:'', 
-            certificateName: '', certIssuedBy:'', certDateIssue:'', certExpiry:'', certID:''
+            Acadevalues: [], JobHistvalues:[], Certvalues:[],
+           locationCovered: [], courseTrainingLanguage: [], selectLang: [], selectValue:[]
         }      
     }
 
@@ -43,15 +42,6 @@ getdata () {
             linkedInProfile: snapshot.val().linkedInProfile,
             website: snapshot.val().website,
             currentEmployer: snapshot.val().currentEmployer,
-            degreeTitle: snapshot.val().degreeTitle,
-            degreeUni: snapshot.val().degreeUni,
-            yearAwarded: snapshot.val().yearAwarded,
-            dcountry: snapshot.val().dcountry,
-            designation: snapshot.val().designation,
-            employer: snapshot.val().employer,
-            jfrom: snapshot.val().jfrom,
-            jto: snapshot.val().jto,
-            jcountry: snapshot.val().jcountry,
             briefSummary: snapshot.val().briefSummary,
             totalExperience: snapshot.val().totalExperience,
             teachingExperience: snapshot.val().teachingExperience,
@@ -64,12 +54,14 @@ getdata () {
             IBAN: snapshot.val().IBAN,
             SWIFT: snapshot.val().SWIFT,
             VAT_ID: snapshot.val().VAT_ID,
-            certificateName: snapshot.val().certificateName,
-            certIssuedBy: snapshot.val().certIssuedBy,
-            certDateIssue: snapshot.val().certDateIssue,
-            certExpiry: snapshot.val().certExpiry,
-            certID: snapshot.val().certID
-        })
+            Acadevalues: snapshot.val().Acadevalues,
+            JobHistvalues: snapshot.val().JobHistvalues,
+            Certvalues: snapshot.val().Certvalues,
+            locationCovered: snapshot.val().locationCovered,
+            courseTrainingLanguage: snapshot.val().courseTrainingLanguage,
+            selectLang: snapshot.val().selectLang,
+            selectValue: snapshot.val().selectValue
+        }, console.log(snapshot.val().selectLang.label))
       })
     }
 
@@ -79,11 +71,10 @@ componentDidMount(){
 
     render(){
             return(
-                <div>
                 <div className="container section project-details">
                     <div className="card z-depth-0">
                     <div className="card-content">
-                    <h2>Profile Details</h2>
+                    <h4>Profile Details</h4>
                     <dl>
                         <ExampleComponent
                             image={this.state.avatarURL}
@@ -92,95 +83,82 @@ componentDidMount(){
                             imageHeight="150"
                             roundedSize="13"
                         />
-                        <h4>Personal Information</h4>
-                        <dt>Email: {this.state.email}</dt>
-                        <dt>First Name: {this.state.firstName}</dt>
-                        <dt>Last Name: {this.state.lastName}</dt>
-                        <dt>Gender: {this.state.gender}</dt> 
-                        <dt>Role: {this.state.role}</dt>
-                        <dt>Address: {this.state.address}</dt>
-                        <dt>City: {this.state.city}</dt>
-                        <dt>Country: {this.state.country}</dt>
-                        <dt>Zip Code: {this.state.zipcode}</dt>
-                        <dt>Cell # 1: {this.state.cell1}</dt>
-                         <dt>Cell # 2: {this.state.cell2}</dt>
-                         <dt>Email # 1: {this.state.email1}</dt>
-                         <dt>Email # 2: {this.state.email2}</dt>
-                         <dt>LinkedIn Profile: {this.state.linkedInProfile}</dt>
-                         <dt>Website: {this.state.website}</dt>
-                         <dt>Current Employer: {this.state.currentEmployer}</dt>
+                        <h6>Personal Information</h6>
+                        <dt>Email: {this.state.email  || ''}</dt>
+                        <dt>First Name: {this.state.firstName || ''}</dt>
+                        <dt>Last Name: {this.state.lastName || ''}</dt>
+                        <dt>Gender: {this.state.gender || ''}</dt> 
+                        <dt>Role: {this.state.role || ''}</dt>
+                        <dt>Address: {this.state.address || ''}</dt>
+                        <dt>City: {this.state.city || ''}</dt>
+                        <dt>Country: {this.state.country || ''}</dt>
+                        <dt>Zip Code: {this.state.zipcode || ''}</dt>
+                        <dt>Cell # 1: {this.state.cell1 || ''}</dt>
+                         <dt>Cell # 2: {this.state.cell2 || ''}</dt>
+                         <dt>Email # 1: {this.state.email1 || ''}</dt>
+                         <dt>Email # 2: {this.state.email2 || ''}</dt>
+                         <dt>LinkedIn Profile: {this.state.linkedInProfile || ''}</dt>
+                         <dt>Website: {this.state.website || ''}</dt>
+                         <dt>Current Employer: {this.state.currentEmployer || ''}</dt>
                          <h4>Academic Information</h4>
-                         <dt>Degree Title: {this.state.degreeTitle}</dt>
-                         <dt>University: {this.state.degreeUni}</dt>
-                         <dt>Year Awarded: {this.state.yearAwarded}</dt>
-                         <dt>Country: {this.state.dcountry}</dt>
+                            <dt>{this.state.Acadevalues && this.state.Acadevalues.map(NAcaval => <div>
+                            <dt>Degree Title: {NAcaval.degreeTitle || ''}</dt>
+                            <dt>Degree Uni: {NAcaval.degreeUni || ''}</dt>
+                            <dt>Year Awarded: {NAcaval.yearAwarded || ''}</dt>
+                            <dt>Country: {NAcaval.dcountry || ''}</dt>
+                            <br />
+                            </div>)}</dt>
                          <h4>Job History</h4>
-                         <dt>Designation: {this.state.designation}</dt>
-                         <dt>Employer: {this.state.employer}</dt>
-                         <dt>From: {this.state.jfrom}</dt>
-                         <dt>To: {this.state.jto}</dt>
-                         <dt>Country: {this.state.jcountry}</dt>
+                            <dt>{this.state.JobHistvalues && this.state.JobHistvalues.map(JHval => <div>
+                                <dt>Designation: {JHval.designation || ''}</dt>
+                                <dt>Employer: {JHval.employer || ''}</dt>
+                                <dt>From: {JHval.jfrom || ''}</dt>
+                                <dt>To: {JHval.jto || ''}</dt>
+                                <dt>Country: {JHval.jcountry || ''}</dt>
+                                <br />
+                            </div>)}</dt>
                          <h4>Brief Summary (2000 characters including spaces)</h4>
-                         <dt> {this.state.briefSummary}</dt>
+                         <dt> {this.state.briefSummary || ''}</dt>
                          <h4>Resume/Profile</h4>
                          <h4>Certificate</h4>
-                        <dt>Certificate Name: {this.state.certificateName}</dt>
-                        <dt>Certificate Issued By: {this.state.certIssuedBy}</dt>
-                        <dt>Certificate Date Issue: {this.state.certDateIssue}</dt>
-                        <dt>Certificate Expiry: {this.state.certExpiry}</dt>
-                        <dt>Certificate ID: {this.state.certID}</dt>
+                            <dt>{this.state.Certvalues && this.state.Certvalues.map(cerVal => <div>
+                                <dt>Certificate Name: {cerVal.certificateName || ''}</dt>
+                                <dt>Certificate Issued By: {cerVal.certIssuedBy || ''}</dt>
+                                <dt>Certificate Date Issue: {cerVal.certDateIssue || ''}</dt>
+                                <dt>Certificate Expiry: {cerVal.certExpiry || ''}</dt>
+                                <dt>Certificate ID: {cerVal.certID || ''}</dt>
+                                <br />
+                            </div>)}</dt>
                          <h4>General Information</h4>
-                         <dt>Total Experience: {this.state.totalExperience}</dt>
-                         <dt>Teaching Experience: {this.state.teachingExperience}</dt>
-                         <dt>Countries Served: {this.state.countriesServed}</dt>
-                         <dt>Languages(with fluency level): {this.state.languages}</dt>
+                         <dt>Total Experience: {this.state.totalExperience || ''}</dt>
+                         <dt>Teaching Experience: {this.state.teachingExperience || ''}</dt>
+                         <dt>Countries Served: {this.state.countriesServed || ''}</dt>
+                         <dt>Languages(with fluency level): {this.state.languages || ''}</dt>
+                         <dt>Course Training Languages: 
+                             {this.state.selectLang && this.state.selectLang.map(sL => 
+                                <div>
+                                    <li>{sL.label || ''}</li>
+                                </div>
+                                )}
+                         </dt>
+                         <dt>Location covered: 
+                             {this.state.selectValue && this.state.selectValue.map(sV => 
+                                <div>
+                                    <li>{sV.label || ''}</li>
+                                </div>
+                                )}
+                             </dt>
                          <h4>Bank Information</h4>
-                         <dt>Account Title: {this.state.accountTitle}</dt>
-                         <dt>Account ID: {this.state.accountID}</dt>
-                         <dt>Bank Name: {this.state.bankName}</dt>
-                         <dt>Branch Name: {this.state.branchName}</dt>
-                         <dt>IBAN: {this.state.IBAN}</dt>
-                         <dt>SWIFT: {this.state.SWIFT}</dt>
-                         <dt>VAT ID: {this.state.VAT_ID}</dt>
+                         <dt>Account Title: {this.state.accountTitle || ''}</dt>
+                         <dt>Account ID: {this.state.accountID || ''}</dt>
+                         <dt>Bank Name: {this.state.bankName || ''}</dt>
+                         <dt>Branch Name: {this.state.branchName || ''}</dt>
+                         <dt>IBAN: {this.state.IBAN || ''}</dt>
+                         <dt>SWIFT: {this.state.SWIFT || ''}</dt>
+                         <dt>VAT ID: {this.state.VAT_ID || ''}</dt>
                     </dl>
                     </div></div></div>
-                </div>
             )
     }}
 
 export default LogPro1
-
-
-                         {/* <h4>Applied for training courses with LearningCert </h4>
-                        <dt>{this.state.appliedFor}</dt>
-                         <h4>Approved for following training courses with LearningCert </h4>
-                         <dt>{this.state.approvedCourses}</dt>
-                         <h4>Courses that I also teach (other than LearningCert) </h4>
-                         <dt>{this.state.OtherCourses}</dt>
-                         <h4>History with LearningCert </h4>
-                         <dt>Number of courses: {this.state.HistNoCourses}</dt>
-                         <dt>Number of Participants: {this.state.HistNoParticipants}</dt>
-                         <h4>Aggregation Rating: (out of 5.0) </h4>
-                         <dt>{this.state.rating}</dt>
-                         <h4>Selected feedback (statements for audience): </h4>
-                         <dt>{this.state.feedback}</dt>
-                         <h4>Training Events: </h4>
-                         <dt>Course Title {this.state.courseTitle}</dt>
-                         <dt>Start Date: {this.state.startDate}</dt>
-                         <dt>End Date: {this.state.endDate}</dt>
-                         <dt>Location (or online) {this.state.location}</dt>
-                         <dt>Timings: {this.state.timings}</dt> */}
-
-                         
-            // appliedFor: snapshot.val().appliedFor,
-            // approvedCourses: snapshot.val().approvedCourses,
-            // OtherCourses: snapshot.val().OtherCourses,
-            // HistNoCourses: snapshot.val().HistNoCourses,
-            // HistNoParticipants: snapshot.val().HistNoParticipants,
-            // rating: snapshot.val().rating,
-            // feedback: snapshot.val().feedback,
-            // courseTitle: snapshot.val().courseTitle,
-            // startDate: snapshot.val().startDate,
-            // endDate: snapshot.val().endDate,
-            // location: snapshot.val().location,
-            // timings: snapshot.val().timings
