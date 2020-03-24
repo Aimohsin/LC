@@ -4,7 +4,7 @@ import 'firebase/auth';
 import 'firebase/storage';
 
 var config = {
-  apiKey: "AIzaSyCgyGlYThXDGKYzbWPQ_ksqNBRLwaXk6ek",
+    apiKey: "AIzaSyCgyGlYThXDGKYzbWPQ_ksqNBRLwaXk6ek",
     authDomain: "newest-ff351.firebaseapp.com",
     databaseURL: "https://newest-ff351.firebaseio.com",
     projectId: "newest-ff351",

@@ -1,5 +1,8 @@
 import React, {Component} from 'react'
 import firebase from '../../config/fbConfig'
+import Header from '../../Header'
+import Sidebar from '../../Sidebar'
+import Footer from '../../Footer'
 
 class CoursePage extends Component{
     constructor(props){
@@ -101,7 +104,14 @@ class CoursePage extends Component{
     render(){
         return(
             <div>
+                <Header />
+                    <Sidebar />
+                <div className="content-wrapper">
+                {/* Content Header (Page header) */}
+                <div className="content-header">
+                <div className="container-fluid">
                 <h3>About Course</h3>
+                <br /><br />
                 <div>
                 <h5>Course Name: </h5>
                 <p>{this.state.CourName}</p>
@@ -114,6 +124,8 @@ class CoursePage extends Component{
                 <h5>Files related to course</h5>
                 <a href='#'><h6>View Files</h6></a>
                 </div>
+                </div></div></div>
+                <Footer/>
             </div>
         )
     }

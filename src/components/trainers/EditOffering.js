@@ -28,8 +28,8 @@ class EditOffering extends Component{
                 var numOfParts = childData.numOfParticipants;
                 var daysOfTraining = childData.daysOfTraining;
                 var generatedCode = childData.generateCode;
-                var startDate = childData.startDate;
-                var endDate = childData.endDate;
+                var startDate = childData.sDate;
+                var endDate = childData.eDate;
                 if(uid === authorID){
                     this.setState({
                        offeringName: name,
@@ -76,6 +76,7 @@ class EditOffering extends Component{
         const {startDate} = this.state;
         return(
             <div>
+                <br />
                 <form onSubmit={this.EditOfferings}>
                 <h4>Edit Offerings Details</h4>
                <div className="input-field">

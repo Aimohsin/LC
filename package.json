@@ -4,26 +4,35 @@
   "private": true,
   "dependencies": {
     "@capaj/react-select-timezone": "^2.0.1",
-    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.9",
     "@kizu/react-table-v6": "^6.11.3",
     "@material-ui/lab": "^4.0.0-alpha.44",
     "@progress/kendo-date-math": "^1.5.1",
+    "admin-lte": "^3.0.2",
     "antd": "^3.26.12",
     "axios": "^0.19.1",
+    "chance": "^1.1.4",
     "downshift": "^5.0.3",
     "firebase": "^7.9.1",
     "generate-password": "^1.4.2",
     "html2canvas": "^1.0.0-rc.5",
     "jspdf-react": "^1.0.11",
     "material-ui-icons": "^1.0.0-beta.36",
+    "materialize-css": "^1.0.0-rc.2",
     "md5": "^2.2.1",
+    "mdbreact": "^4.25.3",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.28",
+    "rc-datetime-picker": "^1.6.1",
     "rc-time-picker": "^3.7.3",
     "react": "^16.13.0",
     "react-avatar-edit": "^0.8.3",
-    "react-bootstrap": "^1.0.0-beta.16",
+    "react-bootstrap": "^1.0.0-beta.17",
+    "react-bootstrap-table-next": "^4.0.0",
     "react-bootstrap-timezone-picker": "^2.0.0",
+    "react-datepicker": "^2.14.0",
     "react-datetime-picker": "^2.9.0",
     "react-dom": "^16.13.0",
     "react-encrypt": "^1.0.1",
@@ -37,7 +46,9 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-select": "^3.0.8",
-    "react-table": "^7.0.0-rc.15",
+    "react-table": "6.10.0",
+    "react-table-hoc-fixed-columns": "^2.3.0",
+    "react-table-select": "^0.2.7",
     "react-time-picker": "^3.9.0",
     "react-timezone": "^2.4.0",
     "react-timezone-picker": "^1.0.8",
@@ -45,7 +56,8 @@
     "redux": "^4.0.0",
     "redux-firestore": "^0.5.7",
     "redux-form": "^8.2.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -54,6 +66,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.12.0"
+    "@fortawesome/fontawesome-free": "^5.12.1"
   }
 }

@@ -6,12 +6,11 @@ import UploadFile from '../functions/uploadFile'
 import BookView from './AcademicValues/AcadeView';
 import JobHistory from './JobHistValues/JobHistView';
 import CertHistory from './CertificateValues/CertView';
-// import Languages from './Languages';
-// import LocationsCovered from './LocationsCovered';
-import LC from './LC'
-import Lang from './Lang'
 import PropTypes from 'prop-types';
-import Select from 'react-select'
+import Select from 'react-select';
+import Header from '../../Header'
+import Sidebar from '../../Sidebar';
+import Footer from '../../Footer';
 
 const LCoptions = [
   { label:'Afghanistan', value:'Afghanistan' },
@@ -225,7 +224,7 @@ componentDidMount(){
         totalExperience: this.state.totalExperience,
         teachingExperience: this.state.teachingExperience,
         countriesServed: this.state.countriesServed,
-        languages: this.state.languages,
+        // languages: this.state.languages,
         accountTitle: this.state.accountTitle,
         accountID: this.state.accountID,
         bankName: this.state.bankName,
@@ -233,9 +232,9 @@ componentDidMount(){
         IBAN: this.state.IBAN,
         SWIFT: this.state.SWIFT,
         VAT_ID: this.state.VAT_ID,
-        Acadevalues: this.state.Acadevalues,
+        // Acadevalues: this.state.Acadevalues,
         // Certvalues: this.state.Certvalues,
-        JobHistvalues: this.state.JobHistvalues,
+        // JobHistvalues: this.state.JobHistvalues,
         // locationsCovered: this.state.locationsCovered,
         // courseTrainingLanguage: this.state.courseTrainingLanguage,
         selectLang: this.state.selectLang,
@@ -245,9 +244,16 @@ componentDidMount(){
   }
   render(){
       return(
-        <div className="container section project-details">
+        <div>
+           <Header />
+           <Sidebar />
+           <div className="content-wrapper">
+    {/* Content Header (Page header) */}
+    <div className="content-header">
+      <div className="container-fluid">
+        {/* <div className="container section project-details"> */}
         <form  onSubmit={this.SubmitHandler}>
-    <div className="card z-depth-0">
+    {/* <div className="card z-depth-0"> */}
       <div className="card-content">
           <h4>Edit Profile Details: </h4>
           <h5>Choose Picture</h5>
@@ -329,8 +335,8 @@ componentDidMount(){
             <label htmlFor="currentEmployer">Current Employer</label>
             <input type="text" id='currentEmployer' value={this.state.currentEmployer || ''} onChange={this.ChangeHandler} />
           </div>
-               <BookView />          
-              <JobHistory />
+               {/* <BookView />          
+              <JobHistory /> */}
           <div className="input-field">
           <h5>Brief Summary (2000 characters including spaces)</h5>
           <textarea id="briefSummary"  value={this.state.briefSummary} onChange={this.ChangeHandler}></textarea>
@@ -351,7 +357,7 @@ componentDidMount(){
             <input type="text" id='countriesServed' value={this.state.countriesServed || ''} onChange={this.ChangeHandler} />
           </div>          
           <div className="input-field">
-            <label htmlFor="languages">Course Training Languages</label><br /><br />
+            <label htmlFor="languages">Course Training Languages</label><br />
             <Select options={LCoptions} 
                         isMulti 
                         closeMenuOnSelect={ false }
@@ -365,7 +371,7 @@ componentDidMount(){
             {/* <input type="text" id='languages' value={this.state.languages || ''} onChange={this.ChangeHandler} /> */}
           </div>
           <div className="input-field">
-            <label htmlFor="languages">Location covered</label><br /><br />
+            <label htmlFor="languages">Location covered</label><br />
             {/* <LocationsCovered value={this.state.locationsCovered || ''} />    */}
             <Select 
             options={Language} 
@@ -412,8 +418,12 @@ componentDidMount(){
             <button className="btn pink lighten-1">Save Changes</button>
           </div>
         </div>
-    </div>
+    {/* </div> */}
     </form>
+  {/* </div> */}
+  </div>
+  </div></div>
+  <Footer />
   </div>
     )
   }}

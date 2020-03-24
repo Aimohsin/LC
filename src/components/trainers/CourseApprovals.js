@@ -4,14 +4,17 @@ import Select from 'react-select'
 import ReactTable from "@kizu/react-table-v6";
 import "@kizu/react-table-v6/react-table.css";
 import FileUploader from "react-firebase-file-uploader";
-import UploadFile from '../functions/uploadFile'
+import UploadFile from '../functions/uploadFile';
+import Header from '../../Header'
+import Sidebar from '../../Sidebar'
+import Footer from '../../Footer'
 
 class CourseApproval extends Component{
     constructor(props){
         super(props);
         this.state = {
             CourName:[], selectedCourse: null, comments:'', evidence:'', status: false, 
-            data: [], Cour_Name:[], ReqCourse: [], isUploading: false, progress: 0, avatarURL: '' 
+            data: [], Cour_Name:[], ReqCourse: [], isUploading: false, progress: 0, avatarURL: '', DeclineData:[]
         }
     }
 
@@ -20,7 +23,7 @@ class CourseApproval extends Component{
         const StorageRef = files.child('pdf')
         StorageRef.listAll().then(function(res) {
             Promise.all(res.items.map((fileRef) => fileRef.getDownloadURL())).then((downloadURLs) => {
-                console.log(downloadURLs);
+               // console.log(downloadURLs);
                 var uid = firebase.auth().currentUser.uid;
                 firebase.database().ref('Users/CourseApprovals/').on('value', (snapshot) => {
                     snapshot.forEach((childSnapshot) => {
@@ -28,7 +31,7 @@ class CourseApproval extends Component{
                         var avatarURL = childData.avatarURL;
                         var Tid = childData.uid;
                         if(Tid === uid){
-                            console.log(avatarURL);
+                            //console.log(avatarURL);
                             if(avatarURL === downloadURLs){
                                 //console.log(downloadURLs);
                             }
@@ -78,6 +81,7 @@ class CourseApproval extends Component{
             avatarURL: this.state.avatarURL,
             evidence: this.state.evidence,
             isUploading: this.state.isUploading,
+            status: 'Pending',
             progress: this.state.progress,
             uid
         })
@@ -152,6 +156,90 @@ class CourseApproval extends Component{
             }) 
         })
     }
+    getCompleteData(){
+        var uid = firebase.auth().currentUser.uid;
+        firebase.database().ref("Users/CourseApprovals/").on('value', snapshot => {
+            const CombineData = [];
+            snapshot.forEach((childSnapshot) => {
+                var childData = childSnapshot.val();
+                var TrainerID = childData.uid;
+                if(TrainerID === uid){
+                    console.log(TrainerID)
+                    firebase.database().ref('Users/AdminDecline').on('value', ADsnapshot => {
+                        ADsnapshot.forEach((ADchildSnapshot) => {
+                            var childData = ADchildSnapshot.val();
+                            var TID = childData.selected.TID;
+                            if(TrainerID === TID){
+                                firebase.database().ref('Users/AdminRevert').on('value', ARsnapshot => {
+                                    ARsnapshot.forEach((ARchildSnapshot) => {
+                                        var childData = ARchildSnapshot.val();
+                                        var ARtid = childData.selected.TID;
+                                        if(TID === ARtid){
+                                            const ARdata = {
+                                                CourseName: ARchildSnapshot.val().selected.CourseName,
+                                                evidence: childSnapshot.val().evidence,
+                                                status: ARchildSnapshot.val().status,
+                                                adminComment: ARchildSnapshot.val().adminComment,
+                                                Comments: childSnapshot.val().comments
+                                            }
+                                            CombineData.push(ARdata)
+                                            const ADdata = {
+                                                CourseName: ADchildSnapshot.val().selected.CourseName,
+                                                evidence: childSnapshot.val().evidence,
+                                                status: ADchildSnapshot.val().status,
+                                                adminComment: ADchildSnapshot.val().adminComment,
+                                                Comments: childSnapshot.val().comments
+                                            }
+                                            CombineData.push( ADdata )
+                                            const TData = {
+                                                CourseName: childSnapshot.val().selectedTrainer.label,
+                                                evidence: childSnapshot.val().evidence,
+                                                avatarURL: childSnapshot.val().avatarURL,
+                                                status: childSnapshot.val().status,
+                                                Comments: childSnapshot.val().comments
+                                            }
+                                            CombineData.push( TData )
+                                        }
+                                    })
+                                    this.setState({
+                                        CombineData
+                                    })
+                                })
+                            }
+                        })
+                    })
+                }
+            })
+        })
+    }
+
+    getDataWithDeclineAndRevert(){
+        var uid = firebase.auth().currentUser.uid;
+        firebase.database().ref('Users/AdminDecline').on('value', snapshot => {
+            const DeclineData = [];
+            snapshot.forEach((childSnapshot) => {
+                var childData = childSnapshot.val();
+                var TrainerID = childData.selected.TID;
+                var CourseName = childData.selected.CourseName;
+                var AdminComment = childData.adminComment;
+                var Status = childData.status;
+                if(uid === TrainerID){
+                    console.log(CourseName);
+                    console.log(AdminComment);
+                    console.log(Status)
+                    const TData = {
+                        CourseName: childSnapshot.val().selected.CourseName,
+                        status: childSnapshot.val().status,
+                        adminComment: childSnapshot.val().adminComment,
+                    }
+                    DeclineData.push(TData)
+                }
+            })
+            this.setState({
+                DeclineData
+            })
+        })
+    }
 
     getCompleteTable(){
         var uid = firebase.auth().currentUser.uid;
@@ -173,7 +261,8 @@ class CourseApproval extends Component{
                         CourseName: childSnapShot.val().selectedTrainer.label,
                         evidence: childSnapShot.val().evidence,
                         avatarURL: childSnapShot.val().avatarURL,
-                        Comments: childSnapShot.val().comments
+                        Comments: childSnapShot.val().comments,
+                        status: childSnapShot.val().status
                     }
                     data.push(TData);
                 }}
@@ -191,9 +280,11 @@ class CourseApproval extends Component{
         this.getCompleteTable();
         this.reqNewCourses();
         this.getDesiredFile();
+        this.getDataWithDeclineAndRevert();
+        this.getCompleteData();
     }
     render(){
-        const {selectedCourse, data} = this.state;
+        const {selectedCourse, data, DeclineData, CombineData} = this.state;
         const columns = [
             { Header: "SL No", maxWidth: 100,filterable: false, Cell: props => {
                 return <div>{props.index + 1}</div>;
@@ -213,17 +304,77 @@ class CourseApproval extends Component{
             //     Cell: <a href='#' onClick={this.DownloadEvidence}>Download File</a>
             // },
              {
-                Header: 'Comments',
+                Header: 'Your Comments',
                 accessor: 'Comments',
-            }, {
+            }, 
+            {
                 Header: 'Status',
                 accessor: 'status',
-                Cell: 'Pending'
-            },];
+            },
+        ];
+        const columnsDecline = [
+            { Header: "SL No", maxWidth: 100,filterable: false, Cell: props => {
+                return <div>{props.index + 1}</div>;
+              }}, 
+            {
+                Header: 'Course Name',
+                accessor: 'CourseName',
+            },
+            {
+                Header: 'Status',
+                accessor: 'status',
+            },
+            {
+                Header: 'Admin Comment',
+                accessor: 'adminComment',
+            },
+        ];
+        const columnsCombine = [
+            { Header: "SL No", maxWidth: 100,filterable: false, Cell: props => {
+                return <div>{props.index + 1}</div>;
+              }}, 
+              {
+                Header: 'Course Name',
+                accessor: 'CourseName',
+            },
+            {
+                Header: 'Evidence',
+                accessor:'evid',
+                Cell: <a href='#' onClick={this.DownloadEvidence}>View File</a>
+            }, 
+             {
+                Header: 'Your Comments',
+                accessor: 'Comments',
+            }, 
+            {
+                Header: 'Status',
+                accessor: 'status',
+            },
+            {
+                Header: 'Admin Comment',
+                accessor: 'adminComment',
+            },
+        ];
         return(
             <div>
+                <Header />
+                <Sidebar />
+                <div className="content-wrapper">
+                {/* Content Header (Page header) */}
+                <div className="content-header">
+                <div className="container-fluid">
                 <div>
-                    <h5>Pending Approvals</h5>
+                    <br />
+                    {/* <h4>Combine Approvals</h4>
+                    <ReactTable
+                        data={CombineData}
+                        columns={columnsCombine}
+                        style={{ textAlign: "center" }}
+                        defaultPageSize={5}
+                        className="-striped -highlight"
+                        />
+                    <br /> */}
+                    <h4>Pending Approvals</h4>
                     <div>
                     <ReactTable
                         data={data}
@@ -233,9 +384,17 @@ class CourseApproval extends Component{
                         className="-striped -highlight"
                         />
                         <br />
+                        <h4>Decline Approvals</h4>
+                        <ReactTable
+                        data={DeclineData}
+                        columns={columnsDecline}
+                        style={{ textAlign: "center" }}
+                        defaultPageSize={5}
+                        className="-striped -highlight"
+                        />
                     </div>
-                    <form onSubmit={this.handleSubmit}>
-                    <h5>Request New Course</h5>
+                    <form onSubmit={this.handleSubmit}><br />
+                    <h4>Request New Course</h4>
                     <div className="input-field">
                     <label htmlFor="courseName">Course Name</label><br /><br/>
                     <Select value={selectedCourse} onChange={this.handleChangeCourse} options={this.state.CourName || ''} />
@@ -264,6 +423,8 @@ class CourseApproval extends Component{
                         </div>
                     </form>
                 </div>
+                </div></div></div>
+                <Footer />
             </div>
         )
     }

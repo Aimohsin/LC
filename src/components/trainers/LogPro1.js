@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import firebase from '../../config/fbConfig'
 import ExampleComponent from 'react-rounded-image'
+import Header from '../../Header'
+import Sidebar from '../../Sidebar'
+import Footer from '../../Footer'
 
 class LogPro1 extends Component{
 
@@ -61,7 +64,7 @@ getdata () {
             courseTrainingLanguage: snapshot.val().courseTrainingLanguage,
             selectLang: snapshot.val().selectLang,
             selectValue: snapshot.val().selectValue
-        }, console.log(snapshot.val().selectLang.label))
+        })
       })
     }
 
@@ -71,8 +74,15 @@ componentDidMount(){
 
     render(){
             return(
-                <div className="container section project-details">
-                    <div className="card z-depth-0">
+                <div>
+                     <Header />
+                    <Sidebar />
+                <div className="content-wrapper">
+                {/* Content Header (Page header) */}
+                <div className="content-header">
+                <div className="container-fluid">
+                {/* <div className="container section project-details"> */}
+                    {/* <div className="card z-depth-0"> */}
                     <div className="card-content">
                     <h4>Profile Details</h4>
                     <dl>
@@ -157,7 +167,12 @@ componentDidMount(){
                          <dt>SWIFT: {this.state.SWIFT || ''}</dt>
                          <dt>VAT ID: {this.state.VAT_ID || ''}</dt>
                     </dl>
+                    {/* </div> */}
+                    {/* </div> */}
+                    </div>
                     </div></div></div>
+                    <Footer />
+                    </div>
             )
     }}
 

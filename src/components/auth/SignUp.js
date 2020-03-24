@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { signUp } from '../../store/actions/authActions'
@@ -19,7 +19,7 @@ class SignUp extends Component {
   GenPass(){
     var generator = require('generate-password');
     var password = generator.generate({
-        length:6,
+        length:7,
         numbers: true
     });
     document.getElementById("password").value = password;
@@ -32,7 +32,8 @@ class SignUp extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.signUp(this.state);
+    console.log(this.state)
+    // this.props.signUp(this.state);
   }
   render() {
     const { isPasswordShown } = this.state;

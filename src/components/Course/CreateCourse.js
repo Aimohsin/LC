@@ -7,6 +7,10 @@ import Select from 'react-select';
 import moment from "moment";
 import "antd/dist/antd.css";
 import DateTimePicker from 'react-datetime-picker';
+import { T } from 'antd/lib/upload/utils'
+import Header from '../../Header'
+import Sidebar from '../../Sidebar'
+import Footer from '../../Footer'
 
 const Learning= [
   {label: 'Online', value: 1},
@@ -45,8 +49,9 @@ class CreateProject extends Component {
   constructor(props){
     super(props);
     this.state = {
-      location:'', daysOfTraining:'', numOfParticipants:'', CourName:[], selectedTrainer: null, generateCode:'',
-      StartTimezone:'', EndTimezone:'', Learning:[], sDate: '', eDate: ''
+      location:'', daysOfTraining:'', numOfParticipants:'', CourName:[], selectedTrainer: null, password:'',
+      StartTimezone:'', Learning:[], sDate:'', eDate:'', sTime:'', eTime:''
+
    }
   }
 
@@ -96,15 +101,15 @@ componentDidMount(){
     this.getSelectedCourse();
 }
 
-GenCode(){
+GenPass(){
   var generator = require('generate-password');
-  var generateCode = generator.generate({
-      length:5,
+  var password = generator.generate({
+      length:7,
       numbers: true
   });
-  document.getElementById("generateCode").value = generateCode;
-  console.log(generateCode)
-} 
+  document.getElementById("password").value = password;
+  console.log(password);
+}
 
   handleChange = (e) => {
     this.setState({
@@ -112,75 +117,104 @@ GenCode(){
     })
   }
 
-  onChangeeDate = eDate => this.setState({ eDate })
-
-  onChangesDate = sDate => this.setState({ sDate })
-
   onChangeTimeZone = (e) => {
     this.setState({
       timezone: e.target.value
     })
   }
 
+  handleDateChange = date => {
+    this.setState({
+      startDate: date.target.value
+    }, console.log(date));
+  };
+
+  handleCode = (code) => {
+    this.setState({
+      generateCode: code
+    })
+  }
+
+  handleTimeChange = time => {
+    this.setState({
+      startTime: time.target.value
+    }, console.log(time));
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
+    //console.log(this.state.sDate);
+    console.log(this.state.password)
     this.props.createProject(this.state);
     console.log(this.state)
     this.props.history.push('/');
   }
   render() {
-    const { selectedTrainer } = this.state;
+    const { selectedTrainer, sDate } = this.state;
     const { auth } = this.props;
     if (!auth.uid) return <Redirect to='/signin' /> 
     return (
+      <div>
+        <Header />
+                    <Sidebar />
+                <div className="content-wrapper">
+                {/* Content Header (Page header) */}
+                <div className="content-header">
+                <div className="container-fluid">
+                 
       <div className="container">
         <br /><br/>
         <form className="white" onSubmit={this.handleSubmit}>
+        
           <h5 className="grey-text text-darken-3">Add training you want to offer</h5>
           <div className="input-field">
           <label htmlFor="courseName">Training Name</label><br /><br />
             <Select value={selectedTrainer} onChange={this.handleChangeTrainer} options={this.state.CourName || ''} />
-          </div>
+          </div><br />
           <div className="input-field">
           <label htmlFor="learning">Learning</label><br/><br/>
           <Select options={Learning} onChange={this.handleChangeLearning} value={this.state.Learning} />
-          </div>
+          </div><br />
           <div className="input-field">
           <label htmlFor="daysOfTraining">Days of training</label><br/><br/>
             <input type="text" id='daysOfTraining' onChange={this.handleChange} style={{width: '700px', height: '25px'}} />
-          </div>
+          </div><br />
           <div className="input-field">
           <label htmlFor="location">Location</label><br/><br/>
             <input type="text" id='location' onChange={this.handleChange} style={{width: '700px', height: '25px'}} />
-          </div>
+          </div><br />
           <div className="input-field">
           <label htmlFor="startDate">Start Date, Time and Timezone</label><br/><br/>
-          <DateTimePicker onChange={this.onChangesDate} value={this.state.sDate} /> <br /><br />
-              <Select options={optionsValues}  style={{width: '200px', height: '25px'}}
+            <input type="date" onChange={e => this.setState({ sDate: e.target.value })} /><br />
+            <input type="time" onChange={e => this.setState({ sTime: e.target.value })} />
+          <br />
+              Timezone: <Select options={optionsValues}  style={{width: '200px', height: '25px'}} value={this.state.optionsValues}
               onChange={StartTimezone => this.setState({ StartTimezone })}
               />
               <br/>       
           </div>
           <div className="input-field">
             <label htmlFor="endDate">End Date, Time and Timezone</label><br/><br/>
-            <DateTimePicker onChange={this.onChangeeDate} value={this.state.eDate} /> <br /><br />
-              <Select options={optionsValues}  style={{width: '200px', height: '25px'}}
-              onChange={EndTimezone => this.setState({ EndTimezone })}
-              />
+            <input type="date" onChange={e => this.setState({ eDate: e.target.value })} /><br />
+            <input type="time" onChange={e => this.setState({ eTime: e.target.value })} />
           </div>
           <div className="input-field">
           <label htmlFor="numOfParticipants">No. of Participants</label><br/><br/>
             <input type="text" id='numOfParticipants' onChange={this.handleChange} style={{width: '700px', height: '25px'}} />
-          </div>
+          </div><br />
           <div className="input-field">
           <label htmlFor="generateCode">Generate Code</label><br/><br/>
-            <input type="text" id='generateCode' onChange={this.handleChange} style={{width: '700px', height: '25px'}} />
-            <input type="button" className="btn pink lighten-1 z-depth-0"  value="Generate" onClick={this.GenCode}/>
+            {/* <input type="text" id='generateCode' onChange={this.handleChange} style={{width: '700px', height: '25px'}} /> */}
+            <input type="text" id='password' onChange={this.handleChange} />
+            <input type="button" class="button" className="btn pink lighten-1 z-depth-0"  value="Generate" onClick={this.GenPass}/>
           </div><br/>
           <div className="input-field">
-            <button className="btn pink lighten-1">Add</button>
+            <button type='submit' className="btn pink lighten-1">Add</button>
           </div>
         </form>
+      </div>
+      </div></div></div>
+      <Footer />
       </div>
     )
   }
@@ -200,69 +234,11 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProject)
 
-// import TimezonePicker from 'react-timezone'
-// import { DatePicker } from 'antd';
-// import TimePicker from 'react-time-picker';
-// import Tpicker from './TimePicker';
- {/* <input type="date" format="YYYY-MM-D" style={{ width: '200px', height: '25px' }}
-            onChange={ e => this.setState({ startDate: e.target.value })}
-              /><span> </span>
-              <TP value={this.state.Starttime} onChange={Starttime => this.setState({ Starttime })} /> */}
-              {/* <Timepicker value={this.state.Starttime} onChange={Starttime => this.setState({ Starttime })} /> */}
-               
- {/* <TimePicker onChange={this.onChange} value={this.state.time} /> */}
-              {/* <DatePicker format="YYYY-MM-D HH:m:s" />{'  '} */}
-               {/* <input type="date" format="YYYY-MM-D" style={{width: '200px', height: '25px'}}
-            onChange={e => this.setState({ endDate: e.target.value })}
-              />
-              <TP value={this.state.EndTime} onChange={EndTime => this.setState({ EndTime })} /> */}
-              {/* <Timepicker value={this.state.EndTime} onChange={EndTime => this.setState({ EndTime })} /> */}
- {/* <input
-            type="date"
-            onChange={e => this.setState({ startDate: e.target.value })}
-            format="YYYY-MM-D HH:m:s"
-            style={{width: '200px', height: '25px'}}
-              />  */}
-              {/* <Tpicker /> */}
-                {/* <input
-                    type="date"
-                    format="YYYY-MM-D HH:m:s"
-                    style={{width: '200px', height: '25px'}}
-                    onChange={e => this.setState({ endDate: e.target.value })}
-                  /> */}
-                  // {startDate && (
-                  //   <React.Fragment>
-                  //     <h6 htmlFor="startDate">End Date:</h6>
-                  //     <DatePicker format="YYYY-MM-D HH:m:s" />
-                  //      <TimezonePicker
-                  //       // value="Asia/Yerevan"
-                  //       placeholder= "Select Timezone"
-                  //       onChange={timezone => console.log('New Timezone Selected:', timezone)}
-                  //       inputProps={{
-                  //         placeholder: 'Select Timezone...',
-                  //         name: 'timezone',
-                  //       }}
-                  //       />
-                  //   </React.Fragment>
-                  // )}  
+            {/* <DateTimePicker onChange={this.onChangeeDate} value={this.state.eDate} /> <br /><br /> */}
+          {/* <DateTimePicker onChange={this.onChangesDate} value={this.state.sDate} /> <br /><br /> */}
+          {/* <DatePicker selected={this.state.startDate} value={this.state.startDate} onChange={this.handleDateChange} /> */}
+          {/* Date: <DP selected={this.state.startDate} value={this.state.startDate} onChange={this.handleDateChange} /> */}
+                    {/* Time: <TP selected={this.state.startTime} value={this.state.startTime} onChange={this.handleTimeChange} /> */}
+{/* Date: <DP selected={this.state.endDate} value={this.state.endDate} onChange={this.handleDateChange} />
+            Time: <TP selected={this.state.endTime} value={this.state.endTime} onChange={this.handleTimeChange} /> */}
 
-                   {/* <TimezonePicker
-                placeholder= "Select Timezone" id={StartTimezone} name="StartTimezone"
-                onChange={this.handleChangeTimezone}
-                inputProps={{
-                  placeholder: 'Select Timezone...',
-                  onChange={handleChangeTimezone},
-                  name: 'timezone',
-                }}  
-             /> */}
-                         {/* <DatePicker format="YYYY-MM-D HH:m:s" />{'  '} */}
-             {/* timezone => console.log(timezone) */}
-
-             {/* <TimezonePicker
-                    placeholder= "Select Timezone"
-                    onChange={timezone => console.log('New Timezone Selected:', timezone)}
-                    inputProps={{
-                      placeholder: 'Select Timezone...',
-                      name: 'timezone',
-                    }}
-                    /> */}
